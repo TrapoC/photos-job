@@ -1,13 +1,543 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Photo Portfolio | Fine</title>
+    <title>Studio Portfolio | Fine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Bebas Neue', 'cursive'],
+            },
+          },
+        },
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        cursor: none;
+        background-color: #000;
+        color: #fff;
+        overflow-x: hidden;
+      }
+      
+      .custom-cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #fff;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transform: translate(-50%, -50%);
+        transition: transform 0.15s ease-out;
+      }
+      
+      .cursor-grow {
+        transform: translate(-50%, -50%) scale(3);
+      }
+      
+      .project-item {
+        transition: opacity 0.3s ease;
+      }
+      
+      .project-item:hover .project-image {
+        transform: scale(1.05);
+      }
+      
+      .project-image {
+        transition: transform 0.7s ease-out;
+      }
+      
+      .smooth-scroll {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        will-change: transform;
+      }
+      
+      .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #000;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+      
+      .menu-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+      
+      .menu-item {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+      }
+      
+      .menu-item-text {
+        display: inline-block;
+        transform: translateY(100%);
+        transition: transform 0.5s ease;
+      }
+      
+      .menu-overlay.active .menu-item-text {
+        transform: translateY(0);
+      }
+      
+      @keyframes marquee {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+      
+      .marquee {
+        animation: marquee 30s linear infinite;
+      }
+      
+      .reveal {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 1s ease, transform 1s ease;
+      }
+      
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Hide scrollbar but allow scrolling */
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      
+      body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="bg-black text-white">
+    <div class="custom-cursor"></div>
+    
+    <!-- Menu Overlay -->
+    <div class="menu-overlay">
+      <div class="container mx-auto px-4">
+        <nav class="flex flex-col items-center space-y-8">
+          <div class="menu-item overflow-hidden py-2">
+            <a href="#projects" class="text-5xl md:text-7xl font-display tracking-wider menu-item-text">PROJECTS</a>
+          </div>
+          <div class="menu-item overflow-hidden py-2">
+            <a href="#about" class="text-5xl md:text-7xl font-display tracking-wider menu-item-text">ABOUT</a>
+          </div>
+          <div class="menu-item overflow-hidden py-2">
+            <a href="#contact" class="text-5xl md:text-7xl font-display tracking-wider menu-item-text">CONTACT</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="smooth-scroll">
+      <!-- Header -->
+      <header class="fixed top-0 left-0 w-full z-40 py-6 px-6 md:px-12">
+        <div class="flex items-center justify-between">
+          <a href="#" class="text-2xl font-bold tracking-tighter">STUDIO</a>
+          <button id="menu-toggle" class="text-white cursor-none">MENU</button>
+        </div>
+      </header>
+      
+      <!-- Hero Section -->
+      <section class="h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+          <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-50">
+            <source src="https://images.unsplash.com/photo-1486728297118-82a07bc48a28?q=80&w=2076&auto=format&fit=crop" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 z-10 text-center">
+          <h1 class="text-7xl md:text-9xl font-display mb-6 tracking-wider">
+            STUDIO<span class="text-gray-400">PORTFOLIO</span>
+          </h1>
+          
+          <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-8">
+            Creating bold experiences through design and development
+          </p>
+        </div>
+        
+        <div class="absolute bottom-10 left-0 w-full overflow-hidden">
+          <div class="whitespace-nowrap flex">
+            <div class="marquee inline-block">
+              <span class="text-4xl font-display tracking-wider px-4">DESIGN • DEVELOPMENT • PHOTOGRAPHY • MOTION • DESIGN • DEVELOPMENT • PHOTOGRAPHY • MOTION •</span>
+            </div>
+            <div class="marquee inline-block">
+              <span class="text-4xl font-display tracking-wider px-4">DESIGN • DEVELOPMENT • PHOTOGRAPHY • MOTION • DESIGN • DEVELOPMENT • PHOTOGRAPHY • MOTION •</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Projects Section -->
+      <section id="projects" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+          <h2 class="text-5xl md:text-6xl font-display mb-16 tracking-wider reveal">SELECTED WORK</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+            <!-- Project 1 -->
+            <div class="project-item reveal">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1964&auto=format&fit=crop" 
+                    alt="Project 1" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">URBAN SHADOWS</h3>
+                  <p class="text-gray-400">Photography / 2023</p>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="project-item reveal" data-delay="0.2">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1486728297118-82a07bc48a28?q=80&w=2076&auto=format&fit=crop" 
+                    alt="Project 2" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">CONCRETE DREAMS</h3>
+                  <p class="text-gray-400">Architecture / 2022</p>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Project 3 -->
+            <div class="project-item reveal" data-delay="0.3">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Project 3" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">NEON NIGHTS</h3>
+                  <p class="text-gray-400">Night / 2023</p>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Project 4 -->
+            <div class="project-item reveal" data-delay="0.4">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Project 4" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">SOLITUDE</h3>
+                  <p class="text-gray-400">Landscape / 2021</p>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Project 5 -->
+            <div class="project-item reveal" data-delay="0.5">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1965&auto=format&fit=crop" 
+                    alt="Project 5" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">GEOMETRIC PATTERNS</h3>
+                  <p class="text-gray-400">Architecture / 2022</p>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Project 6 -->
+            <div class="project-item reveal" data-delay="0.6">
+              <a href="#" class="block overflow-hidden">
+                <div class="overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1506102383123-c8ef1e872756?q=80&w=1470&auto=format&fit=crop" 
+                    alt="Project 6" 
+                    class="w-full h-auto project-image"
+                  />
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-2xl font-display tracking-wider">URBAN MOTION</h3>
+                  <p class="text-gray-400">Street / 2023</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- About Section -->
+      <section id="about" class="py-20 px-4 md:px-8 bg-zinc-900">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <div class="reveal">
+              <h2 class="text-5xl md:text-6xl font-display mb-8 tracking-wider">ABOUT US</h2>
+              <p class="text-xl text-gray-300 mb-6">
+                We are a creative studio specializing in photography, design, and development. 
+                Our work explores the intersection of art and technology, creating bold and 
+                immersive experiences.
+              </p>
+              <p class="text-xl text-gray-300">
+                Founded in 2018, we've collaborated with brands and individuals around the world, 
+                bringing their visions to life through our unique perspective and technical expertise.
+              </p>
+            </div>
+            
+            <div class="reveal" data-delay="0.3">
+              <img 
+                src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1964&auto=format&fit=crop" 
+                alt="About" 
+                class="w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Contact Section -->
+      <section id="contact" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+          <h2 class="text-5xl md:text-6xl font-display mb-16 tracking-wider reveal">GET IN TOUCH</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="reveal">
+              <h3 class="text-2xl font-display tracking-wider mb-6">CONTACT INFO</h3>
+              <p class="text-xl text-gray-300 mb-4">hello@studioportfolio.com</p>
+              <p class="text-xl text-gray-300 mb-4">+1 (212) 555-0123</p>
+              <p class="text-xl text-gray-300">123 Broadway, New York, NY 10001</p>
+            </div>
+            
+            <div class="reveal" data-delay="0.3">
+              <form class="space-y-6">
+                <div>
+                  <label for="name" class="block text-sm font-medium mb-2">Name</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    class="w-full bg-transparent border-b border-white py-2 focus:outline-none"
+                  />
+                </div>
+                
+                <div>
+                  <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    class="w-full bg-transparent border-b border-white py-2 focus:outline-none"
+                  />
+                </div>
+                
+                <div>
+                  <label for="message" class="block text-sm font-medium mb-2">Message</label>
+                  <textarea 
+                    id="message" 
+                    rows="4" 
+                    class="w-full bg-transparent border-b border-white py-2 focus:outline-none"
+                  ></textarea>
+                </div>
+                
+                <button 
+                  type="submit" 
+                  class="px-8 py-3 border border-white hover:bg-white hover:text-black transition-colors duration-300"
+                >
+                  SEND MESSAGE
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Footer -->
+      <footer class="py-12 px-6 md:px-12 border-t border-gray-800">
+        <div class="container mx-auto">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+              <h3 class="text-2xl font-display tracking-wider">STUDIO<span class="text-gray-400">PORTFOLIO</span></h3>
+            </div>
+            
+            <div class="flex space-x-8">
+              <a href="#" class="hover:text-gray-400 transition-colors">Instagram</a>
+              <a href="#" class="hover:text-gray-400 transition-colors">Twitter</a>
+              <a href="#" class="hover:text-gray-400 transition-colors">LinkedIn</a>
+            </div>
+          </div>
+          
+          <div class="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-500 text-sm">
+              © 2023 Studio Portfolio. All rights reserved.
+            </p>
+            <div class="flex space-x-4 mt-4 md:mt-0">
+              <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" class="text-gray-500 hover:text-white text-sm transition-colors">
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script>
+      // Custom cursor
+      const cursor = document.querySelector('.custom-cursor');
+      
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      });
+      
+      // Add cursor grow effect on links and buttons
+      const links = document.querySelectorAll('a, button');
+      links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          cursor.classList.add('cursor-grow');
+        });
+        
+        link.addEventListener('mouseleave', () => {
+          cursor.classList.remove('cursor-grow');
+        });
+      });
+      
+      // Menu toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuOverlay = document.querySelector('.menu-overlay');
+      
+      menuToggle.addEventListener('click', () => {
+        menuOverlay.classList.toggle('active');
+        menuToggle.textContent = menuOverlay.classList.contains('active') ? 'CLOSE' : 'MENU';
+      });
+      
+      // Close menu when clicking on menu items
+      const menuItems = document.querySelectorAll('.menu-item a');
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+          menuOverlay.classList.remove('active');
+          menuToggle.textContent = 'MENU';
+        });
+      });
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Reveal animations on scroll
+      const revealElements = document.querySelectorAll('.reveal');
+      
+      function checkReveal() {
+        const windowHeight = window.innerHeight;
+        const revealPoint = 150;
+        
+        revealElements.forEach(element => {
+          const revealTop = element.getBoundingClientRect().top;
+          const delay = element.getAttribute('data-delay') || 0;
+          
+          if (revealTop < windowHeight - revealPoint) {
+            setTimeout(() => {
+              element.classList.add('active');
+            }, delay * 1000);
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', checkReveal);
+      window.addEventListener('load', checkReveal);
+      
+      // Smooth scroll effect
+      let scrollContainer = document.querySelector('.smooth-scroll');
+      let currentY = 0;
+      let targetY = 0;
+      const ease = 0.1;
+      
+      // Only enable smooth scrolling on desktop
+      if (window.innerWidth > 768) {
+        // Set the height of the body to match the scrollable content
+        function setBodyHeight() {
+          document.body.style.height = `${scrollContainer.offsetHeight}px`;
+        }
+        
+        // Update scroll position
+        function updateScroll() {
+          currentY = parseFloat(lerp(currentY, targetY, ease)).toFixed(2);
+          scrollContainer.style.transform = `translateY(${-currentY}px)`;
+          requestAnimationFrame(updateScroll);
+        }
+        
+        // Linear interpolation
+        function lerp(start, end, t) {
+          return start * (1 - t) + end * t;
+        }
+        
+        window.addEventListener('resize', setBodyHeight);
+        window.addEventListener('load', () => {
+          setBodyHeight();
+          updateScroll();
+        });
+        
+        window.addEventListener('scroll', () => {
+          targetY = window.scrollY;
+        });
+      }
+    </script>
   </body>
 </html>
